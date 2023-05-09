@@ -7,6 +7,8 @@
 #define SERVER_PORT 6000
 using namespace std;
 
+#include "src/Producto.h"
+
 char menu(){
 	char opcion;
 	cout<<"1. Registrarse"<<endl;

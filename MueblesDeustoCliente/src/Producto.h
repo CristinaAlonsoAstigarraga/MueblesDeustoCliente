@@ -21,20 +21,24 @@ public:
 	Producto(char *cod, char *n, char *d, int c, double p, int t);
 	Producto(const Producto &p);
 	void quitarSalto(char *cad);
-	//ADMIN
-	void modificarProducto(Producto *p);
-	void modificarNombre(Producto *p);
-	void modificarDescripcion(Producto *p);
-	void modificarCantidad(Producto *p);
-	void modificarPrecio(Producto *p);
-	virtual ~Producto();
+	double getPrecio();
+	char * getCodigo();
+	char * getNombre();
+	int getCantidad();
+
+	//CLIENTE
+	Producto nombreProductoDevolver();
+	Producto codigoProductoBorrar();
+	int nuevaCantidadProducto();
+	Producto codigoProductoModificar();
+	Producto anadirProductoBD();
 };
 
 class ListaProductos: public CategoriaProducto {
 	Producto *aProductos;
 	int numProductos;
 public:
-	ListaProductos();
+//	ListaProductos();
 	ListaProductos(int numProductos);
 	ListaProductos buscarProducto(ListaProductos lp, CategoriaProducto c);
 	void volcarFicheroAListaProductos(ListaProductos *lp, char *nombreFichero);

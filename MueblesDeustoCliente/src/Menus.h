@@ -7,16 +7,14 @@
 
 #ifndef SRC_MENUS_H_
 #define SRC_MENUS_H_
-#include "Cliente.h"
 
-class Menus : public Cliente{
+class Menus {
 public:
-	Menus();
-	int menuInicio();
-	int menuAdmin();
-	int menuCliente();
+	static int menuInicio();
+	static int menuAdmin();
+	static int menuCliente();
 
-	Cliente inicioSesion();
+//	Cliente inicioSesion();
 	void leerConfig(char *nomfich, char *nombd);
 	virtual ~Menus();
 };

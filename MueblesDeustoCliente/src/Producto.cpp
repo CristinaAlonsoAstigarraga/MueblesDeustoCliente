@@ -38,7 +38,9 @@ void Producto::quitarSalto(char *cad) {
 Producto Producto::nombreProductoDevolver() {
 	char get[20] = "";
 	Producto p;
-	cout<< "\n¿Qué producto desea devolver? (introduzca el codigo del producto): "<< endl;
+	cout
+			<< "\n¿Qué producto desea devolver? (introduzca el codigo del producto): "
+			<< endl;
 	cin >> get;
 	sprintf(p.cod_p, "%s", get);
 	return p;
@@ -47,25 +49,27 @@ Producto Producto::nombreProductoDevolver() {
 Producto Producto::codigoProductoBorrar() {
 	char get[20] = "";
 	Producto p;
-	cout<< "\n¿Qué producto desea eliminar? (introduzca el código del producto): "<< endl;
+	cout
+			<< "\n¿Qué producto desea eliminar? (introduzca el código del producto): "
+			<< endl;
 	cin >> get;
 	sprintf(p.cod_p, "%s", get);
 	return p;
 }
 
-double Producto::getPrecio(){
+double Producto::getPrecio() {
 	return precio;
 }
 
-char * Producto::getCodigo(){
+char* Producto::getCodigo() {
 	return cod_p;
 }
 
-char * Producto::getNombre(){
+char* Producto::getNombre() {
 	return nombre;
 }
 
-int Producto::getCantidad(){
+int Producto::getCantidad() {
 	return cantidad;
 }
 
@@ -79,42 +83,38 @@ int Producto::nuevaCantidadProducto() {
 }
 
 Producto Producto::codigoProductoModificar() {
-	char get[20] = "";
 	Producto p;
-	cout
-			<< "\n¿Qué producto desea modificar? (introduzca el código del producto): "
-			<< endl;
-	cin >> get;
-	sprintf(p.cod_p, "%s", get);
+	cout << "\n¿Qué producto desea modificar? (introduzca el código del producto): " << endl;
+	cin >> p.cod_p;
 	return p;
 }
 
 Producto Producto::anadirProductoBD() {
 	char get[20] = "";
 	Producto p;
-	cout<<"\nIntroduce los datos del nuevo producto: "<<endl;
-	cout<<"Codigo: "<<endl;
-	cin>>get;
+	cout << "\nIntroduce los datos del nuevo producto: " << endl;
+	cout << "Codigo: " << endl;
+	cin >> get;
 	quitarSalto(get);
 	sprintf(p.cod_p, "%s", get);
-	cout<<"Nombre: "<<endl;
-	cin>>get;
+	cout << "Nombre: " << endl;
+	cin >> get;
 	quitarSalto(get);
 	sprintf(p.nombre, "%s", get);
-	cout<<"Descripcion: "<<endl;
-	cin>>get;
+	cout << "Descripcion: " << endl;
+	cin >> get;
 	quitarSalto(get);
 	sprintf(p.descripcion, "%s", get);
-	cout<<"Cantidad: "<<endl;
-	cin>>get;
+	cout << "Cantidad: " << endl;
+	cin >> get;
 	quitarSalto(get);
 	sscanf(get, "%i", &p.cantidad);
-	cout<<"Precio: "<<endl;
-	cin>>get;
+	cout << "Precio: " << endl;
+	cin >> get;
 	quitarSalto(get);
 	sscanf(get, "%lf", &p.precio);
-	cout<<"Categoria: "<<endl;
-	cin>>get;
+	cout << "Categoria: " << endl;
+	cin >> get;
 	quitarSalto(get);
 	sscanf(get, "%d", &p.tipo);
 	return p;
@@ -125,8 +125,5 @@ Producto Producto::anadirProductoBD() {
 //
 //}
 
-
-
 //LISTA PRODUCTOS:
-
 

@@ -75,8 +75,16 @@ Cliente::~Cliente() {
 
 void ListaClientes::anadirClientesALista(ListaClientes *lc,
 		Cliente nuevoCliente) {
+	Cliente *aux = new Cliente[lc->numC];
+	for(int i=0;i<lc->numC;i++){
+		aux[i] = lc->aClientes[i];
+	}
+	delete [] lc->aClientes;
 	lc->aClientes = new Cliente[lc->numC + 1];
-	copy(lc->aClientes, lc->aClientes + lc->numC, lc->aClientes);
+	for(int i=0;i<lc->numC;i++){
+		lc->aClientes[i] = aux[i];
+	}
+	delete [] aux;
 	lc->aClientes[lc->numC] = nuevoCliente;
 	lc->numC++;
 }

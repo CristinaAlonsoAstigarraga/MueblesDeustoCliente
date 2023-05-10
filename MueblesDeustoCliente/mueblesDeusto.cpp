@@ -6,9 +6,9 @@
 #define SERVER_IP "127.0.0.1"
 #define SERVER_PORT 6000
 using namespace std;
-
+#include "src/Menus.h"
 #include "src/Producto.h"
-
+/*
 char menu(){
 	char opcion;
 	cout<<"1. Registrarse"<<endl;
@@ -37,7 +37,7 @@ char menuCliente(){
 	cout<<"Elige una opci�n: ";
 	cin>>opcion;
 	return opcion;
-}
+}*/
 
 int main(int argc, char *argv[]) {
 
@@ -83,7 +83,9 @@ int main(int argc, char *argv[]) {
 			ntohs(server.sin_port));
 
 	/*EMPIEZA EL PROGRAMA DEL CLIENTE*/
-	char opcion,opcionA,opcionC;
+	Producto p;
+	Menus::menuInicio();
+	/*char opcion,opcionA,opcionC;
 	char nom[20],con[20];
 	int resul;
 	do{
@@ -135,7 +137,7 @@ int main(int argc, char *argv[]) {
 		}
 
 	}while(opcion!='0');
-
+*/
 	/*ACABA EL PROGRAMA DEL CLIENTE*/
 	// CLOSING the socket and cleaning Winsock...
 	closesocket(s);

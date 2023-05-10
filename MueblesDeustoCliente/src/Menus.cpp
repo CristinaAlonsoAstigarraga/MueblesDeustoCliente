@@ -10,12 +10,7 @@
 #include <iostream>
 using namespace std;
 
-Menus::Menus() {
-
-}
-
 int Menus::menuInicio() {
-	char get[2] = "";
 	int opcion = 0;
 	cout << "\nMENÚ INICIO: " << endl;
 	cout << "---------------------- " << endl;
@@ -23,13 +18,11 @@ int Menus::menuInicio() {
 	cout << "2. Iniciar sesion " << endl;
 	cout << "0. Salir" << endl;
 	cout << "Selecciona una opción: " << endl;
-	cin >> get;
-	sscanf(get, "%d", &opcion);
+	cin >> &opcion;
 	return opcion;
 
 }
 int Menus::menuAdmin() {
-	char get[2] = "";
 	int opcion = 0;
 	cout << "\nMENÚ ADMIN: " << endl;
 	cout << "---------------------- " << endl;
@@ -40,8 +33,7 @@ int Menus::menuAdmin() {
 	cout << "5. Estadisticas " << endl;
 	cout << "0. Salir " << endl;
 	cout << "Selecciona una opción: " << endl;
-	cin >> get;
-	sscanf(get, "%d", &opcion);
+	cin >> &opcion;
 	return opcion;
 }
 int Menus::menuCliente() {
@@ -59,7 +51,7 @@ int Menus::menuCliente() {
 	sscanf(get, "%d", &opcion);
 	return opcion;
 }
-
+/*
 Cliente Menus::inicioSesion() {
 	char get[2] = "";
 	Cliente c;
@@ -71,7 +63,7 @@ Cliente Menus::inicioSesion() {
 	sscanf(get, "%s", c.getContrasenya());
 	return c;
 
-}
+}*/
 void Menus::leerConfig(char *nomfich, char *nombd) {
 
 }

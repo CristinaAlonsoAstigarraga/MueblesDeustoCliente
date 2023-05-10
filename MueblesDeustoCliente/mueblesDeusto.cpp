@@ -38,7 +38,7 @@ char menuCliente(){
 	cin>>opcion;
 	return opcion;
 }*/
-
+//esto es una pruebawedvwebvweb
 int main(int argc, char *argv[]) {
 
 	WSADATA wsaData;

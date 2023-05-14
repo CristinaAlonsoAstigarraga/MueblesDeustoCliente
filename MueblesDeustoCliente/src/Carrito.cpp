@@ -3,15 +3,15 @@
 #include <iostream>
 using namespace std;
 
-//Carrito::Carrito() {
-//	aProductos = new Carrito[strlen+1];
-//	numProductos = 0;
-//	dni[0] = '\0';
-//	importeTotal = 0;
-//
-//
-//
-//}
+Carrito::Carrito() {
+	aProductos = NULL;
+	numProductos = 0;
+	dni[0] = '\0';
+	importeTotal = 0;
+
+
+
+}
 
 Carrito::Carrito(int np, char *d, float it) {
 //	this->aProductos = new Carrito*[numProductos];
@@ -32,13 +32,13 @@ Carrito::Carrito(int np, char *d, float it) {
 //
 //}
 void Carrito::imprimirCarrito(Carrito c) {
-	cout << "\nCarrito del usuario '%s':" << c.dni << endl;
+	cout << "\nCarrito del usuario:" << c.dni << endl;
 	for (int i = 0; i < c.numProductos; i++) {
-		cout << "[PRODUCTO %d: " << i + 1 << endl;
-		cout << "CODIGO: %s, " << c.aProductos[i].getCodigo() << endl;
-		cout << "NOMBRE: %s, " << c.aProductos[i].getNombre() << endl;
-		cout << "CANTIDAD: %d, " << c.aProductos[i].getCantidad() << endl;
-		cout << "PRECIO: %.2f]" << c.aProductos[i].getPrecio() << endl;
+		cout << endl<<"[PRODUCTO " << i + 1;
+		cout << ": CODIGO: " << c.aProductos[i].getCodigo();
+		cout << ", NOMBRE: " << c.aProductos[i].getNombre();
+		cout << ", CANTIDAD: " << c.aProductos[i].getCantidad();
+		cout << ", PRECIO: " << c.aProductos[i].getPrecio() << "]" << endl;
 	}
 }
 void Carrito::imprimirTicket(Carrito c, char *nombreFichero) {
@@ -49,7 +49,8 @@ void Carrito::eliminarProductoCarrito(Carrito *carrito, Producto producto) {
 	int encontrado = 0;
 
 	for (i = 0; i < carrito->numProductos && !encontrado; i++) {
-		if (strcmp(carrito->aProductos[i].getCodigo(), producto.getCodigo()) == 0) {
+		if (strcmp(carrito->aProductos[i].getCodigo(), producto.getCodigo())
+				== 0) {
 			// Producto encontrado, eliminamos y actualizamos el importe total
 			carrito->importeTotal -= carrito->aProductos[i].getPrecio();
 			for (int j = i; j < carrito->numProductos - 1; j++) {
@@ -68,6 +69,12 @@ void Carrito::eliminarProductoCarrito(Carrito *carrito, Producto producto) {
 	}
 }
 void Carrito::aniadirProductoCarrito(Carrito *carrito, Producto p) {
+	carrito->numProductos++;
+	Producto* newArray = new Producto[carrito->numProductos];
+	std::copy(carrito->aProductos, carrito->aProductos + carrito->numProductos - 1, newArray);
+	newArray[carrito->numProductos - 1] = p;
+	delete[] carrito->aProductos;
+	carrito->aProductos = newArray;
 
 }
 void Carrito::comprarCarrito(Carrito *carrito) {
@@ -81,23 +88,25 @@ int Carrito::menuBuscar(Carrito *c, ListaProductos lp) {
 	char codigoProd[20] = "";
 //	Producto *p;
 	do {
-		cout<<"\n1. Aniadir un producto a mi carrito"<<endl;
-		cout<<"0. Volver"<<endl;
-		cout<<"Selecciona una opción: "<<endl;
-		cin>> opcion;
+		cout << "\n1. Aniadir un producto a mi carrito" << endl;
+		cout << "0. Volver" << endl;
+		cout << "Selecciona una opción: " << endl;
+		cin >> opcion;
 		switch (opcion) {
 		case 1:
-			cout<<"¿Qué producto de la tienda desea añadir a su carrito? (Introduzca su codigo): "<<endl;
-			cin>> codigoProd;
+			cout
+					<< "¿Qué producto de la tienda desea añadir a su carrito? (Introduzca su codigo): "
+					<< endl;
+			cin >> codigoProd;
 //			p = buscarProd(lp, codigoProd);
 //			aniadirProductoCarrito(c, *p);
 			imprimirCarrito(*c);
 			break;
 		case 0:
-			cout<<"\nAgur!"<<endl;
+			cout << "\nAgur!" << endl;
 			break;
 		default:
-			cout<<"Error!"<<endl;
+			cout << "Error!" << endl;
 			break;
 		}
 	} while (opcion != 0);

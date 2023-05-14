@@ -64,6 +64,15 @@ int Producto::getCantidad() {
 	return cantidad;
 }
 
+
+char * Producto::getDescripcion(){
+	return descripcion;
+}
+
+int Producto::getTipo(){
+	return tipo;
+}
+
 int Producto::nuevaCantidadProducto() {
 	int nuevaCantidad;
 	char get[1000] = "";
@@ -101,6 +110,4 @@ Producto Producto::anadirProductoBD() {
 //Producto::~Producto() {
 //
 //}
-
-//LISTA PRODUCTOS:
 

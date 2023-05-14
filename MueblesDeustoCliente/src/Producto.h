@@ -23,14 +23,16 @@ public:
 	double getPrecio();
 	char * getCodigo();
 	char * getNombre();
+	char * getDescripcion();
+	int getTipo();
 	int getCantidad();
 
 	//CLIENTE
-	Producto nombreProductoDevolver();
-	Producto codigoProductoBorrar();
-	int nuevaCantidadProducto();
-	Producto codigoProductoModificar();
-	Producto anadirProductoBD();
+	static Producto nombreProductoDevolver();
+	static Producto codigoProductoBorrar();
+	static int nuevaCantidadProducto();
+	static Producto codigoProductoModificar();
+	static Producto anadirProductoBD();
 };
 
 class ListaProductos {

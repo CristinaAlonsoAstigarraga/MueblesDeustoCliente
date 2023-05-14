@@ -14,7 +14,6 @@ Cliente::Cliente() {
 	dni[0] = '\0';
 	usuario[0] = '\0';
 	contrasena[0] = '\0';
-
 }
 
 Cliente::Cliente(char *d, char *u, char *con) {

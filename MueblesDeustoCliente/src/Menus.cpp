@@ -18,7 +18,7 @@ int Menus::menuInicio() {
 	cout << "2. Iniciar sesion " << endl;
 	cout << "0. Salir" << endl;
 	cout << "Selecciona una opción: " << endl;
-	cin >> &opcion;
+	cin >> opcion;
 	return opcion;
 
 }
@@ -33,12 +33,11 @@ int Menus::menuAdmin() {
 	cout << "5. Estadisticas " << endl;
 	cout << "0. Salir " << endl;
 	cout << "Selecciona una opción: " << endl;
-	cin >> &opcion;
+	cin >> opcion;
 	return opcion;
 }
 int Menus::menuCliente() {
 	int opcion = 0;
-	char get[2] = "";
 	cout << "\nMENÚ CLIENTE: " << endl;
 	cout << "---------------------- " << endl;
 	cout << "1. Visualizar el carrito de la compra " << endl;
@@ -47,8 +46,7 @@ int Menus::menuCliente() {
 	cout << "4. Buscar un producto " << endl;
 	cout << "0. Salir " << endl;
 	cout << "Selecciona una opción: " << endl;
-	cin >> get;
-	sscanf(get, "%d", &opcion);
+	cin >> opcion;
 	return opcion;
 }
 /*

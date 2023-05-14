@@ -78,20 +78,17 @@ void Carrito::comprarCarrito(Carrito *carrito) {
 }
 int Carrito::menuBuscar(Carrito *c, ListaProductos lp) {
 	int opcion;
-	char get[20] = "";
 	char codigoProd[20] = "";
 //	Producto *p;
 	do {
 		cout<<"\n1. Aniadir un producto a mi carrito"<<endl;
 		cout<<"0. Volver"<<endl;
 		cout<<"Selecciona una opción: "<<endl;
-		cin>>get;
-		sscanf(get, "%d", &opcion);
+		cin>> opcion;
 		switch (opcion) {
 		case 1:
 			cout<<"¿Qué producto de la tienda desea añadir a su carrito? (Introduzca su codigo): "<<endl;
-			cin>>get;
-			sprintf(codigoProd, "%s", get);
+			cin>> codigoProd;
 //			p = buscarProd(lp, codigoProd);
 //			aniadirProductoCarrito(c, *p);
 			imprimirCarrito(*c);

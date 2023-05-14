@@ -7,7 +7,7 @@
 
 #ifndef SRC_PRODUCTO_H_
 #define SRC_PRODUCTO_H_
-#include "CategoriaProducto.h"
+//#include "CategoriaProducto.h"
 
 class Producto {
 	char cod_p[10];
@@ -20,7 +20,6 @@ public:
 	Producto();
 	Producto(char *cod, char *n, char *d, int c, double p, int t);
 	Producto(const Producto &p);
-	void quitarSalto(char *cad);
 	double getPrecio();
 	char * getCodigo();
 	char * getNombre();
@@ -34,13 +33,13 @@ public:
 	Producto anadirProductoBD();
 };
 
-class ListaProductos: public CategoriaProducto {
+class ListaProductos {
 	Producto *aProductos;
 	int numProductos;
 public:
 //	ListaProductos();
 	ListaProductos(int numProductos);
-	ListaProductos buscarProducto(ListaProductos lp, CategoriaProducto c);
+	ListaProductos buscarProducto(ListaProductos lp, int categoria);
 	void volcarFicheroAListaProductos(ListaProductos *lp, char *nombreFichero);
 	void anadirProducto(ListaProductos *lp);
 	void eliminarProducto(Producto p, ListaProductos *lp);

@@ -43,83 +43,94 @@ using namespace std;
 //esto es una pruebawedvwebvweb
 int main(int argc, char *argv[]) {
 
-//	WSADATA wsaData;
-//	SOCKET s;
-//	struct sockaddr_in server;
-//	char sendBuff[512], recvBuff[512];
-//
-//	/*
-//	 * En sendBuff guardaremos lo que el cliente le env�a al servidor
-//	 * En recvBuff guardaremos lo que el servidor le env�a al cliente
-//	 * */
-//	printf("\nInitialising Winsock...\n");
-//	if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0) {
-//		printf("Failed. Error Code : %d", WSAGetLastError());
-//		return -1;
-//	}
-//
-//	printf("Initialised.\n");
-//
-//	//SOCKET creation
-//	if ((s = socket(AF_INET, SOCK_STREAM, 0)) == INVALID_SOCKET) {
-//		printf("Could not create socket : %d", WSAGetLastError());
-//		WSACleanup();
-//		return -1;
-//	}
-//
-//	printf("Socket created.\n");
-//
-//	server.sin_addr.s_addr = inet_addr(SERVER_IP); //INADDR_ANY;
-//	server.sin_family = AF_INET;
-//	server.sin_port = htons(SERVER_PORT);
-//
-//	//CONNECT to remote server
-//	if (connect(s, (struct sockaddr*) &server, sizeof(server)) == SOCKET_ERROR) {
-//		printf("Connection error: %d", WSAGetLastError());
-//		closesocket(s);
-//		WSACleanup();
-//		return -1;
-//	}
-//
-//	printf("Connection stablished with: %s (%d)\n", inet_ntoa(server.sin_addr),
-//			ntohs(server.sin_port));
+	WSADATA wsaData;
+	SOCKET s;
+	struct sockaddr_in server;
+	char sendBuff[512], recvBuff[512];
+
+	/*
+	 * En sendBuff guardaremos lo que el cliente le env�a al servidor
+	 * En recvBuff guardaremos lo que el servidor le env�a al cliente
+	 * */
+	printf("\nInitialising Winsock...\n");
+	if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0) {
+		printf("Failed. Error Code : %d", WSAGetLastError());
+		return -1;
+	}
+
+	printf("Initialised.\n");
+
+	//SOCKET creation
+	if ((s = socket(AF_INET, SOCK_STREAM, 0)) == INVALID_SOCKET) {
+		printf("Could not create socket : %d", WSAGetLastError());
+		WSACleanup();
+		return -1;
+	}
+
+	printf("Socket created.\n");
+
+	server.sin_addr.s_addr = inet_addr(SERVER_IP); //INADDR_ANY;
+	server.sin_family = AF_INET;
+	server.sin_port = htons(SERVER_PORT);
+
+	//CONNECT to remote server
+	if (connect(s, (struct sockaddr*) &server, sizeof(server)) == SOCKET_ERROR) {
+		printf("Connection error: %d", WSAGetLastError());
+		closesocket(s);
+		WSACleanup();
+		return -1;
+	}
+
+	printf("Connection stablished with: %s (%d)\n", inet_ntoa(server.sin_addr),
+			ntohs(server.sin_port));
 
 	/*EMPIEZA EL PROGRAMA DEL CLIENTE*/
-	Producto p("123", "nombreP1", "descrP1", 10, 10, 1);
-	Producto p2("234", "nombreP2", "descrP2", 22, 22, 2);
-
-	Menus::menuAdmin();
-	Menus::menuCliente();
-	Menus::menuInicio();
-
+//	Producto p("123", "nombreP1", "descrP1", 10, 10, 1);
+//	Producto p2("234", "nombreP2", "descrP2", 22, 22, 2);
+//
+//	Menus::menuAdmin();
+//	Menus::menuCliente();
+//	Menus::menuInicio();
+//
 	Cliente nuevoCliente;
-	Carrito carritoPrueba;
-	Carrito::aniadirProductoCarrito(&carritoPrueba, p);
-	Carrito::aniadirProductoCarrito(&carritoPrueba, p2);
-	Carrito::imprimirCarrito(carritoPrueba);
-	Carrito::eliminarProductoCarrito(&carritoPrueba, p);
-	cout<<endl<<"Hemos borrado un producto"<<endl;
-	Carrito::imprimirCarrito(carritoPrueba);
-//	Carrito::comprarCarrito(&carritoPrueba);
-	cout<<endl<<"Hemos comprado todo el carrito"<<endl;
-	Carrito::imprimirCarrito(carritoPrueba);
+//	Carrito carritoPrueba;
+//	Carrito::aniadirProductoCarrito(&carritoPrueba, p);
+//	Carrito::aniadirProductoCarrito(&carritoPrueba, p2);
+//	Carrito::imprimirCarrito(carritoPrueba);
+//	Carrito::eliminarProductoCarrito(&carritoPrueba, p);
+//	cout<<endl<<"Hemos borrado un producto"<<endl;
+//	Carrito::imprimirCarrito(carritoPrueba);
+////	Carrito::comprarCarrito(&carritoPrueba);
+//	cout<<endl<<"Hemos comprado todo el carrito"<<endl;
+//	Carrito::imprimirCarrito(carritoPrueba);
 
-//	char nom[20];
-//	int opcion = 10, i;
-//	do {
-//		opcion = Menus::menuInicio();
-//		switch (opcion) {
-//		case 1:
-//			nuevoCliente = Cliente::registro();
-//			sprintf(sendBuff, "%s", nuevoCliente.getUsuario());
-//			send(s, sendBuff, sizeof(sendBuff), 0);
-//
-//			recv(s, recvBuff, sizeof(recvBuff), 0); //Recibe el resultado del Inicio de Sesi�n
-//			sscanf(recvBuff, "%s", nom);
-//			cout << "RESULTADO: " << nom << endl;
-//
-//		}
-//	} while (opcion != 0);
+	char nom[20];
+	int opcion = 10, i, clienteExiste;
+	do {
+		opcion = Menus::menuInicio();
+		sprintf(sendBuff,"%i",opcion);
+		send(s, sendBuff, sizeof(sendBuff), 0);
+
+		switch (opcion) {
+		case 1:
+			nuevoCliente = nuevoCliente.registro();
+			sprintf(sendBuff, "%s", nuevoCliente.getDni());
+			send(s, sendBuff, sizeof(sendBuff), 0);
+
+			recv(s, recvBuff, sizeof(recvBuff), 0); //Recibe el resultado del Inicio de Sesi�n
+			sscanf(recvBuff, "%d", &clienteExiste);
+			if (clienteExiste) {
+				cout << "El cliente ya existe" << endl;
+			} else {
+				cout<<"procedemos a registrar al cliente"<<endl;
+				sprintf(sendBuff, "%s", nuevoCliente.getUsuario());
+				send(s, sendBuff, sizeof(sendBuff), 0);
+				sprintf(sendBuff, "%s", nuevoCliente.getContrasenya());
+				send(s, sendBuff, sizeof(sendBuff), 0);
+
+			}
+		}
+	} while (opcion != 0);
 
 	/*char opcion,opcionA,opcionC;
 	 char nom[20],con[20];
@@ -176,8 +187,8 @@ int main(int argc, char *argv[]) {
 	 */
 	/*ACABA EL PROGRAMA DEL CLIENTE*/
 	// CLOSING the socket and cleaning Winsock...
-//	closesocket(s);
-//	WSACleanup();
+	closesocket(s);
+	WSACleanup();
 
 	return 0;
 }

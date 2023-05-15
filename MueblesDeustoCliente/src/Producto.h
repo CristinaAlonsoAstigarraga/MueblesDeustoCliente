@@ -28,11 +28,11 @@ public:
 	int getCantidad();
 
 	//CLIENTE
-	static Producto nombreProductoDevolver();
-	static Producto codigoProductoBorrar();
-	static int nuevaCantidadProducto();
-	static Producto codigoProductoModificar();
-	static Producto anadirProductoBD();
+	Producto nombreProductoDevolver();
+	Producto codigoProductoBorrar();
+	int nuevaCantidadProducto();
+	Producto codigoProductoModificar();
+	Producto anadirProductoBD();
 };
 
 class ListaProductos {

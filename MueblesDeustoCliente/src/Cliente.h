@@ -16,7 +16,7 @@ public:
 	Cliente();
 	Cliente(char *d, char *u, char *con);
 	Cliente(const Cliente &c);
-	static Cliente registro();
+    Cliente registro();
 	char* getDni();
 	char * getUsuario();
 	char * getContrasenya();

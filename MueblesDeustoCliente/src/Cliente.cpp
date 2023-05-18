@@ -40,15 +40,24 @@ Cliente Cliente::registro() {
 	return c;
 }
 
-char* Cliente::getDni() {
-        return dni;
+Cliente Cliente::inicioSesion() {
+	Cliente c;
+	cout<<"\nIntroduce el nombre de usuario: ";
+	cin>>c.usuario;
+	cout<<"Introduce la contrasenya: ";
+	cin>> c.contrasena;
+	return c;
 }
 
-char* Cliente::getUsuario(){
+char* Cliente::getDni() {
+	return dni;
+}
+
+char* Cliente::getUsuario() {
 	return usuario;
 }
 
-char* Cliente::getContrasenya(){
+char* Cliente::getContrasenya() {
 	return contrasena;
 }
 

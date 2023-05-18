@@ -10,6 +10,7 @@ using namespace std;
 #include "src/Producto.h"
 #include "src/Cliente.h"
 #include "src/Carrito.h"
+#include "string.h"
 /*
  char menu(){
  char opcion;
@@ -93,6 +94,7 @@ int main(int argc, char *argv[]) {
 //	Menus::menuInicio();
 //
 	Cliente nuevoCliente;
+	Cliente inicio;
 //	Carrito carritoPrueba;
 //	Carrito::aniadirProductoCarrito(&carritoPrueba, p);
 //	Carrito::aniadirProductoCarrito(&carritoPrueba, p2);
@@ -105,10 +107,11 @@ int main(int argc, char *argv[]) {
 //	Carrito::imprimirCarrito(carritoPrueba);
 
 	char nom[20];
-	int opcion = 10, i, clienteExiste;
+	int opcion = 10, opcion2 = 10, opcion3 = 10, i, clienteExiste, adminExiste;
+	Producto nuevoProducto;
 	do {
 		opcion = Menus::menuInicio();
-		sprintf(sendBuff,"%i",opcion);
+		sprintf(sendBuff, "%i", opcion);
 		send(s, sendBuff, sizeof(sendBuff), 0);
 
 		switch (opcion) {
@@ -122,14 +125,104 @@ int main(int argc, char *argv[]) {
 			if (clienteExiste) {
 				cout << "El cliente ya existe" << endl;
 			} else {
-				cout<<"procedemos a registrar al cliente"<<endl;
+				cout << "Procedemos a registrar al cliente" << endl;
 				sprintf(sendBuff, "%s", nuevoCliente.getUsuario());
 				send(s, sendBuff, sizeof(sendBuff), 0);
 				sprintf(sendBuff, "%s", nuevoCliente.getContrasenya());
 				send(s, sendBuff, sizeof(sendBuff), 0);
 
 			}
+			break;
+		case 2:
+			clienteExiste = 0;
+			adminExiste = 0;
+			inicio = inicio.inicioSesion();
+			sprintf(sendBuff, "%s", nuevoCliente.getUsuario());
+			send(s, sendBuff, sizeof(sendBuff), 0);
+			sprintf(sendBuff, "%s", nuevoCliente.getContrasenya());
+			send(s, sendBuff, sizeof(sendBuff), 0);
+
+			recv(s, recvBuff, sizeof(recvBuff), 0); //Recibe el resultado del Inicio de Sesi�n
+			sscanf(recvBuff, "%s", inicio.getDni());
+
+			recv(s, recvBuff, sizeof(recvBuff), 0); //Recibe el resultado del Inicio de Sesi�n
+			sscanf(recvBuff, "%d", &clienteExiste);
+			recv(s, recvBuff, sizeof(recvBuff), 0); //Recibe el resultado del Inicio de Sesi�n
+			sscanf(recvBuff, "%d", &adminExiste);
+
+			if (clienteExiste) {
+				cout << "¡Bienvenido a MueblesDeusto!" << endl;
+//				Carrito *carritoCliente = new Carrito*[sizeof(Carrito)];
+//				carritoCliente->getAProductos() = NULL;
+//				carritoCliente->getNumProductos() = 0;		//GETTER O SETTER?
+//				strcpy(carritoCliente->getDni(), inicio.getDni());
+//				carritoCliente->getImporteTotal() = 0;
+
+				do {
+					opcion2 = Menus::menuCliente();
+					switch (opcion2) {
+					case 1:
+//						opcion3 = carritoCliente->mostrarCarrito(
+//								carritoCliente);
+						break;
+					case 2:
+						/*MIRARLO CON MARIAN -- BBDD*/
+						break;
+					case 3:
+						break;
+					case 4:
+						break;
+					case 0:
+						cout << endl << "Agur!" << endl << endl;
+						break;
+					}
+				} while (opcion2 != 0);
+
+			} else if (adminExiste) {
+				cout << "¡Bienvenido a MueblesDeusto!" << endl;
+				do {
+					opcion2 = Menus::menuAdmin();
+					switch (opcion2) {
+					case 1:
+						nuevoProducto = nuevoProducto.anadirProductoBD();
+						sprintf(sendBuff, "%s", nuevoProducto.getCodigo());
+						send(s, sendBuff, sizeof(sendBuff), 0);
+						sprintf(sendBuff, "%s", nuevoProducto.getNombre());
+						send(s, sendBuff, sizeof(sendBuff), 0);
+						sprintf(sendBuff, "%s", nuevoProducto.getDescripcion());
+						send(s, sendBuff, sizeof(sendBuff), 0);
+						sprintf(sendBuff, "%i", nuevoProducto.getCantidad());
+						send(s, sendBuff, sizeof(sendBuff), 0);
+						sprintf(sendBuff, "%f", nuevoProducto.getPrecio());
+						send(s, sendBuff, sizeof(sendBuff), 0);
+						sprintf(sendBuff, "%i", nuevoProducto.getTipo());
+						send(s, sendBuff, sizeof(sendBuff), 0);
+
+						break;
+					case 2:
+						/*MIRARLO CON MARIAN -- BBDD*/
+						break;
+					case 3:
+						break;
+					case 4:
+						break;
+					case 0:
+						cout << endl << "Agur!" << endl << endl;
+						break;
+					}
+				} while (opcion2 != 0);
+			} else {
+				cout << endl << "El usuario no está registrado." << endl;
+			}
+			break;
+		case 0:
+			cout << endl << "Agur!" << endl << endl;
+			break;
+		default:
+			cout << endl << "Error" << endl;
+			break;
 		}
+
 	} while (opcion != 0);
 
 	/*char opcion,opcionA,opcionC;

@@ -10,6 +10,10 @@ class Carrito{
 public:
 	Carrito();
 	Carrito(int np, char *d, float it);
+	Producto * getAProductos() const;		//Producto * getAProductos()?
+	int getNumProductos();
+	char *getDni();
+	float getImporteTotal();
 //	Carrito(const Carrito &c);
 	int mostrarCarrito(Carrito *c);
 	void imprimirCarrito(Carrito c);

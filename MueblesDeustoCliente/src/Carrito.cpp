@@ -24,6 +24,20 @@ Carrito::Carrito(int np, char *d, float it) {
 	}
 }
 
+Producto * Carrito::getAProductos() const{
+	return this->aProductos;
+}
+
+int Carrito::getNumProductos(){
+	return numProductos;
+}
+char *Carrito::getDni(){
+	return dni;
+}
+float Carrito::getImporteTotal(){
+	return importeTotal;
+}
+
 //Carrito::Carrito(const Carrito &c) {
 //
 //}

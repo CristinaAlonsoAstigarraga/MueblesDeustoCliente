@@ -106,8 +106,22 @@ Producto Producto::anadirProductoBD() {
 	return p;
 }
 
+void Producto::setCantidad(int cantidad) {
+	this->cantidad = cantidad;
+}
+
+void Producto::setPrecio(double precio) {
+	this->precio = precio;
+}
+
+void Producto::setTipo(int tipo) {
+	this->tipo = tipo;
+}
+
+void Producto::setCodigo(char * cod){
+	strcpy(cod_p,cod);
+}
 //No hemos reservado memoria para nada, no hay nada que destruir.
 //Producto::~Producto() {
 //
 //}
-

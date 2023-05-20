@@ -10,38 +10,28 @@ using namespace std;
 #include "src/Producto.h"
 #include "src/Cliente.h"
 #include "src/Carrito.h"
+#include "src/ListaProductos.h"
 #include "string.h"
-/*
- char menu(){
- char opcion;
- cout<<"1. Registrarse"<<endl;
- cout<<"2. Iniciar Sesi�n"<<endl;
- cout<<"0. Salir"<<endl;
- cout<<"Elige una opci�n: ";
- cin>>opcion;
- return opcion;
- }
- char menuAdministrador(){
- char opcion;
- cout<<"MENU ADMINISRADOR"<<endl;
- cout<<"1. "<<endl;
- cout<<"2. "<<endl;
- cout<<"0. Salir"<<endl;
- cout<<"Elige una opci�n: ";
- cin>>opcion;
- return opcion;
- }
- char menuCliente(){
- char opcion;
- cout<<"MENU CLIENTE"<<endl;
- cout<<"1. "<<endl;
- cout<<"2. "<<endl;
- cout<<"0. Salir"<<endl;
- cout<<"Elige una opci�n: ";
- cin>>opcion;
- return opcion;
- }*/
-//esto es una pruebawedvwebvweb
+
+ListaProductos recibirListaProductos(char *recvBuff, SOCKET s) {
+	ListaProductos *lp;
+	int tam;
+	recv(s, recvBuff, sizeof(recvBuff), 0);
+	sscanf(recvBuff, "%i", &tam);
+	cout << "Recibido: " << tam << endl;
+	lp = new ListaProductos(tam);
+	Producto p;
+	for (int i = 0; i < tam; i++) {
+		recv(s, recvBuff, sizeof(recvBuff), 0);
+		cout << "Recibido: " << recvBuff << endl;
+		p.setCodigo(recvBuff);
+		//Con el resto de los campos
+
+		lp->aniadirProductoLista(p);
+	}
+
+	return *lp;
+}
 int main(int argc, char *argv[]) {
 
 	WSADATA wsaData;
@@ -86,28 +76,15 @@ int main(int argc, char *argv[]) {
 			ntohs(server.sin_port));
 
 	/*EMPIEZA EL PROGRAMA DEL CLIENTE*/
-//	Producto p("123", "nombreP1", "descrP1", 10, 10, 1);
-//	Producto p2("234", "nombreP2", "descrP2", 22, 22, 2);
-//
-//	Menus::menuAdmin();
-//	Menus::menuCliente();
-//	Menus::menuInicio();
-//
+
 	Cliente nuevoCliente;
 	Cliente inicio;
-//	Carrito carritoPrueba;
-//	Carrito::aniadirProductoCarrito(&carritoPrueba, p);
-//	Carrito::aniadirProductoCarrito(&carritoPrueba, p2);
-//	Carrito::imprimirCarrito(carritoPrueba);
-//	Carrito::eliminarProductoCarrito(&carritoPrueba, p);
-//	cout<<endl<<"Hemos borrado un producto"<<endl;
-//	Carrito::imprimirCarrito(carritoPrueba);
-////	Carrito::comprarCarrito(&carritoPrueba);
-//	cout<<endl<<"Hemos comprado todo el carrito"<<endl;
-//	Carrito::imprimirCarrito(carritoPrueba);
+	ListaProductos *lp;
+	Producto p;
 
 	char nom[20];
-	int opcion = 10, opcion2 = 10, opcion3 = 10, i, clienteExiste, adminExiste;
+	int opcion = 10, opcion2 = 10, opcion3 = 10, i, clienteExiste, adminExiste,
+			modif = 0;
 	Producto nuevoProducto;
 	do {
 		opcion = Menus::menuInicio();
@@ -120,7 +97,7 @@ int main(int argc, char *argv[]) {
 			sprintf(sendBuff, "%s", nuevoCliente.getDni());
 			send(s, sendBuff, sizeof(sendBuff), 0);
 
-			recv(s, recvBuff, sizeof(recvBuff), 0); //Recibe el resultado del Inicio de Sesi�n
+			recv(s, recvBuff, sizeof(recvBuff), 0);
 			sscanf(recvBuff, "%d", &clienteExiste);
 			if (clienteExiste) {
 				cout << "El cliente ya existe" << endl;
@@ -137,17 +114,17 @@ int main(int argc, char *argv[]) {
 			clienteExiste = 0;
 			adminExiste = 0;
 			inicio = inicio.inicioSesion();
-			sprintf(sendBuff, "%s", nuevoCliente.getUsuario());
+			sprintf(sendBuff, "%s", inicio.getUsuario());
 			send(s, sendBuff, sizeof(sendBuff), 0);
-			sprintf(sendBuff, "%s", nuevoCliente.getContrasenya());
+			sprintf(sendBuff, "%s", inicio.getContrasenya());
 			send(s, sendBuff, sizeof(sendBuff), 0);
 
-			recv(s, recvBuff, sizeof(recvBuff), 0); //Recibe el resultado del Inicio de Sesi�n
+			recv(s, recvBuff, sizeof(recvBuff), 0);
 			sscanf(recvBuff, "%s", inicio.getDni());
 
-			recv(s, recvBuff, sizeof(recvBuff), 0); //Recibe el resultado del Inicio de Sesi�n
+			recv(s, recvBuff, sizeof(recvBuff), 0);
 			sscanf(recvBuff, "%d", &clienteExiste);
-			recv(s, recvBuff, sizeof(recvBuff), 0); //Recibe el resultado del Inicio de Sesi�n
+			recv(s, recvBuff, sizeof(recvBuff), 0);
 			sscanf(recvBuff, "%d", &adminExiste);
 
 			if (clienteExiste) {
@@ -160,13 +137,37 @@ int main(int argc, char *argv[]) {
 
 				do {
 					opcion2 = Menus::menuCliente();
+					sprintf(sendBuff, "%i", opcion2);
+					send(s, sendBuff, sizeof(sendBuff), 0);
+
 					switch (opcion2) {
 					case 1:
 //						opcion3 = carritoCliente->mostrarCarrito(
 //								carritoCliente);
 						break;
 					case 2:
-						/*MIRARLO CON MARIAN -- BBDD*/
+						//lp = recibirListaProductos(recvBuff, s);
+						int tam;
+						recv(s, recvBuff, sizeof(recvBuff), 0);
+						sscanf(recvBuff, "%i", &tam);
+						cout << "Recibido: " << tam << endl;
+						/*lp = new ListaProductos(tam);
+						 for(int i=0;i<tam;i++){
+						 recv(s, recvBuff, sizeof(recvBuff), 0);
+						 cout<<"Recibido: "<<recvBuff<<endl;
+						 p.setCodigo(recvBuff);
+						 //Con el resto de los campos
+						 lp->aniadirProductoLista(p);
+						 }*/
+
+						lp->imprimir();
+						/*imprimirListaProductos (productosBD);
+						 codProd = nombreProductoDevolver();
+						 devolverProducto(&productosBD, codProd);
+						 imprimirListaProductos(productosBD);
+						 sqlite3_open(nombd, &db);
+						 devolverProductoBD(db, codProd);
+						 sqlite3_close (db);*/
 						break;
 					case 3:
 						break;
@@ -182,6 +183,9 @@ int main(int argc, char *argv[]) {
 				cout << "¡Bienvenido a MueblesDeusto!" << endl;
 				do {
 					opcion2 = Menus::menuAdmin();
+					sprintf(sendBuff, "%i", opcion2);
+					send(s, sendBuff, sizeof(sendBuff), 0);
+
 					switch (opcion2) {
 					case 1:
 						nuevoProducto = nuevoProducto.anadirProductoBD();
@@ -193,18 +197,28 @@ int main(int argc, char *argv[]) {
 						send(s, sendBuff, sizeof(sendBuff), 0);
 						sprintf(sendBuff, "%i", nuevoProducto.getCantidad());
 						send(s, sendBuff, sizeof(sendBuff), 0);
-						sprintf(sendBuff, "%f", nuevoProducto.getPrecio());
+						sprintf(sendBuff, "%lf", nuevoProducto.getPrecio());
 						send(s, sendBuff, sizeof(sendBuff), 0);
 						sprintf(sendBuff, "%i", nuevoProducto.getTipo());
 						send(s, sendBuff, sizeof(sendBuff), 0);
 
 						break;
 					case 2:
-						/*MIRARLO CON MARIAN -- BBDD*/
+						cout << endl
+								<< "¿Estás seguro de querer modificar un producto? (si: 1, no: 0): "
+								<< endl;
+						cin >> modif;
+						if (modif == 1) {
+							sprintf(sendBuff, "%i", modif);
+							send(s, sendBuff, sizeof(sendBuff), 0);
+
+						}
+
 						break;
 					case 3:
 						break;
 					case 4:
+
 						break;
 					case 0:
 						cout << endl << "Agur!" << endl << endl;
@@ -225,59 +239,6 @@ int main(int argc, char *argv[]) {
 
 	} while (opcion != 0);
 
-	/*char opcion,opcionA,opcionC;
-	 char nom[20],con[20];
-	 int resul;
-	 do{
-	 opcion = menu();
-	 sprintf(sendBuff,"%c",opcion);
-	 send(s, sendBuff, sizeof(sendBuff), 0);
-
-
-
-	 switch(opcion){
-	 case '1': break;
-	 case '2':
-	 cout<<"NOMBRE: ";cin>>nom;
-	 cout<<"CONTRASE�A: ";cin>>con;
-	 sprintf(sendBuff,"%s",nom);
-	 send(s, sendBuff, sizeof(sendBuff), 0); //Env�o el nombre al servidor
-	 sprintf(sendBuff,"%s",con);
-	 send(s, sendBuff, sizeof(sendBuff), 0); //Env�o la contrase�a al servidor
-
-	 recv(s, recvBuff, sizeof(recvBuff), 0); //Recibe el resultado del Inicio de Sesi�n
-	 sscanf(recvBuff,"%d",&resul);
-	 cout<<"RESULTADO: "<<resul<<endl;
-	 if(resul==1){
-	 do{
-	 opcionA = menuAdministrador();
-	 switch(opcionA){
-	 case '1': break;
-	 case '2': break;
-	 case '0': break;
-	 default: cout<<"La opci�n no es correcta"<<endl;
-	 }
-	 }while(opcionA!='0');
-	 }else if(resul ==2){
-	 do{
-	 opcionC = menuCliente();
-	 switch(opcionC){
-	 case '1': break;
-	 case '2': break;
-	 case '0': break;
-	 default: cout<<"La opci�n no es correcta"<<endl;
-	 }
-	 }while(opcionC!='0');
-	 }else{
-	 cout<<"El Inicio de Sesi�n no ha sido correcto"<<endl;
-	 }
-	 break;
-	 case '0': cout<<"AGUR"<<endl;break;
-	 default: cout<<"La opci�n seleccionada no es correcta"<<endl;
-	 }
-
-	 }while(opcion!='0');
-	 */
 	/*ACABA EL PROGRAMA DEL CLIENTE*/
 	// CLOSING the socket and cleaning Winsock...
 	closesocket(s);

@@ -27,25 +27,19 @@ public:
 	int getTipo();
 	int getCantidad();
 
+
+
 	//CLIENTE
 	Producto nombreProductoDevolver();
 	Producto codigoProductoBorrar();
 	int nuevaCantidadProducto();
 	Producto codigoProductoModificar();
 	Producto anadirProductoBD();
+	void setCantidad(int cantidad);
+	void setPrecio(double precio);
+	void setTipo(int tipo);
+	void setCodigo(char * cod);
 };
 
-class ListaProductos {
-	Producto *aProductos;
-	int numProductos;
-public:
-//	ListaProductos();
-	ListaProductos(int numProductos);
-	ListaProductos buscarProducto(ListaProductos lp, int categoria);
-	void volcarFicheroAListaProductos(ListaProductos *lp, char *nombreFichero);
-	void anadirProducto(ListaProductos *lp);
-	void eliminarProducto(Producto p, ListaProductos *lp);
-	virtual ~ListaProductos();
-};
 
 #endif /* SRC_PRODUCTO_H_ */

@@ -1,7 +1,7 @@
 #ifndef CARRITO_H_
 #define CARRITO_H_
 #include "Producto.h"
-
+#include "ListaProductos.h"
 class Carrito{
 	Producto *aProductos;
 	int numProductos;

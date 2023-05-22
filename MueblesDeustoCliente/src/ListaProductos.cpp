@@ -14,10 +14,23 @@ ListaProductos::ListaProductos(int numProductos) {
 	this->numProductos = 0;
 }
 void ListaProductos::aniadirProductoLista(const Producto &p) {
-	if (numProductos < tam) {
-		aProductos[numProductos] = p;
-		numProductos++;
+	if(numProductos == 0){
+		aProductos = new Producto[1];
+	}else{
+		Producto *aux = new Producto[numProductos];
+		for(int i=0;i<numProductos;i++){
+			aux[i] = aProductos[i];
+		}
+		delete []aProductos;
+		aProductos = new Producto[numProductos+1];
+		for(int i=0;i<numProductos;i++){
+			aProductos[i] = aux[i];
+		}
+		delete[] aux;
 	}
+	aProductos[numProductos] = p;
+	numProductos++;
+
 }
 
 int ListaProductos::getNumProductos() {
@@ -105,13 +118,13 @@ void ListaProductos::imprimirListaProductos(ListaProductos lp) {
 	}
 }
 
-ListaProductos ListaProductos::buscarProducto(ListaProductos lp, int categoria){
-	ListaProductos listaCat;
-	for (int i=0; i<numProductos; i++){
+ListaProductos* ListaProductos::buscarProducto(ListaProductos lp, int categoria){
+	ListaProductos *listaCat = new ListaProductos();
+	for (int i=0; i<lp.numProductos; i++){
 		if(lp.aProductos[i].getTipo() == categoria){
-			listaCat.aniadirProductoLista(lp.aProductos[i]);
+			listaCat->aniadirProductoLista(lp.aProductos[i]);
 		}
-	}
+	}cout<<"Numero de productos :"<<listaCat->numProductos<<endl;
 	return listaCat;
 }
 

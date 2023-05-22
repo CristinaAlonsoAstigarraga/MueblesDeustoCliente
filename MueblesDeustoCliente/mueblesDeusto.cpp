@@ -24,19 +24,25 @@ ListaProductos recibirListaProductos(char *recvBuff, SOCKET s) {
 	lp = new ListaProductos(tam);
 	Producto p;
 	for (int i = 0; i < tam; i++) {
+		recvBuff[0]='\0';
 		recv(s, recvBuff, sizeof(recvBuff), 0);
 //		cout << "Recibido: " << recvBuff << endl;
 		p.setCodigo(recvBuff);
+		recvBuff[0]='\0';
 		recv(s, recvBuff, sizeof(recvBuff), 0);
 		p.setNombre(recvBuff);
+		recvBuff[0]='\0';
 		recv(s, recvBuff, sizeof(recvBuff), 0);
 		p.setDescripcion(recvBuff);
+		recvBuff[0]='\0';
 		recv(s, recvBuff, sizeof(recvBuff), 0);
 		sscanf(recvBuff, "%i", &cantidad);
 		p.setCantidad(cantidad);
+		recvBuff[0]='\0';
 		recv(s, recvBuff, sizeof(recvBuff), 0);
 		sscanf(recvBuff, "%lf", &precio);
 		p.setPrecio(precio);
+		recvBuff[0]='\0';
 		recv(s, recvBuff, sizeof(recvBuff), 0);
 		sscanf(recvBuff, "%i", &tipo);
 		p.setTipo(tipo);
@@ -155,12 +161,12 @@ int main(int argc, char *argv[]) {
 
 			if (clienteExiste) {
 				cout << "¡Bienvenido a MueblesDeusto!" << endl;
-//				Carrito *carritoCliente = new Carrito[sizeof(Carrito)];
-//				carritoCliente->getAProductos() = NULL;
-//				carritoCliente->getNumProductos() = 0;		//GETTER O SETTER?
-//				strcpy(carritoCliente->getDni(), inicio.getDni());
-//				carritoCliente->getImporteTotal() = 0;
-
+				/*Carrito *carritoCliente = new Carrito[sizeof(Carrito)];
+				carritoCliente->getAProductos() = NULL;
+				carritoCliente->getNumProductos() = 0;		//GETTER O SETTER?
+				strcpy(carritoCliente->getDni(), inicio.getDni());
+				carritoCliente->getImporteTotal() = 0;
+				*/
 				do {
 					opcion2 = Menus::menuCliente();
 					sprintf(sendBuff, "%i", opcion2);
@@ -168,8 +174,15 @@ int main(int argc, char *argv[]) {
 
 					switch (opcion2) {
 					case 1:
-//						opcion3 = carritoCliente->mostrarCarrito(
-//								carritoCliente);
+//						if(carritoCliente->getNumProductos() == 0){
+//							cout<<"No tienes ningun producto en el carrito"<<endl;
+//						}else{
+//							carritoCliente->imprimirCarrito(*carritoCliente);
+//						}
+//						cout << endl
+//						<< "¿Estás seguro de  un producto? (si: 1, no: 0): "
+//						<< endl;
+//						cin >> modif;
 						break;
 					case 2:
 						*lp = recibirListaProductos(recvBuff, s);
@@ -191,9 +204,10 @@ int main(int argc, char *argv[]) {
 						cin >> categoria;
 //						sprintf(sendBuff, "%i", categoria);
 //						send(s, sendBuff, sizeof(sendBuff), 0);
-//						*lp = recibirListaProductos(recvBuff, s);
+						*lp = recibirListaProductos(recvBuff, s);
 //						lp->imprimirListaProductos(*lp);
-						listaCat = listaCat.buscarProducto(*lp, categoria);
+						listaCat = *(listaCat.buscarProducto(*lp, categoria));
+						cout<<listaCat.numProductos<<endl;
 						listaCat.imprimirListaProductos(listaCat);
 						break;
 					case 0:

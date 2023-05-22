@@ -16,15 +16,31 @@ using namespace std;
 ListaProductos recibirListaProductos(char *recvBuff, SOCKET s) {
 	ListaProductos *lp;
 	int tam;
+	int cantidad, tipo;
+	double precio;
 	recv(s, recvBuff, sizeof(recvBuff), 0);
 	sscanf(recvBuff, "%i", &tam);
-	cout << "Recibido: " << tam << endl;
+//	cout << "Recibido: " << tam << endl;
 	lp = new ListaProductos(tam);
 	Producto p;
 	for (int i = 0; i < tam; i++) {
 		recv(s, recvBuff, sizeof(recvBuff), 0);
-		cout << "Recibido: " << recvBuff << endl;
+//		cout << "Recibido: " << recvBuff << endl;
 		p.setCodigo(recvBuff);
+		recv(s, recvBuff, sizeof(recvBuff), 0);
+		p.setNombre(recvBuff);
+		recv(s, recvBuff, sizeof(recvBuff), 0);
+		p.setDescripcion(recvBuff);
+		recv(s, recvBuff, sizeof(recvBuff), 0);
+		sscanf(recvBuff, "%i", &cantidad);
+		p.setCantidad(cantidad);
+		recv(s, recvBuff, sizeof(recvBuff), 0);
+		sscanf(recvBuff, "%lf", &precio);
+		p.setPrecio(precio);
+		recv(s, recvBuff, sizeof(recvBuff), 0);
+		sscanf(recvBuff, "%i", &tipo);
+		p.setTipo(tipo);
+
 		//Con el resto de los campos
 
 		lp->aniadirProductoLista(p);
@@ -80,11 +96,21 @@ int main(int argc, char *argv[]) {
 	Cliente nuevoCliente;
 	Cliente inicio;
 	ListaProductos *lp;
+	ListaProductos *lp2;
 	Producto p;
+	Producto codigoDevolver;
+	Producto nombreProductoModificar;
+	Producto nombreProductoEliminar;
+	Producto caro;
+	Producto mayorCantidad;
+	int cantidad, tipo;
+	double precio;
+	int sillas, mesas, sofas, categoria;
+	ListaProductos listaCat;
 
 	char nom[20];
 	int opcion = 10, opcion2 = 10, opcion3 = 10, i, clienteExiste, adminExiste,
-			modif = 0;
+			modif = 0, nuevaCantidad, elim = 0;
 	Producto nuevoProducto;
 	do {
 		opcion = Menus::menuInicio();
@@ -129,7 +155,7 @@ int main(int argc, char *argv[]) {
 
 			if (clienteExiste) {
 				cout << "¡Bienvenido a MueblesDeusto!" << endl;
-//				Carrito *carritoCliente = new Carrito*[sizeof(Carrito)];
+//				Carrito *carritoCliente = new Carrito[sizeof(Carrito)];
 //				carritoCliente->getAProductos() = NULL;
 //				carritoCliente->getNumProductos() = 0;		//GETTER O SETTER?
 //				strcpy(carritoCliente->getDni(), inicio.getDni());
@@ -146,32 +172,29 @@ int main(int argc, char *argv[]) {
 //								carritoCliente);
 						break;
 					case 2:
-						//lp = recibirListaProductos(recvBuff, s);
-						int tam;
-						recv(s, recvBuff, sizeof(recvBuff), 0);
-						sscanf(recvBuff, "%i", &tam);
-						cout << "Recibido: " << tam << endl;
-						/*lp = new ListaProductos(tam);
-						 for(int i=0;i<tam;i++){
-						 recv(s, recvBuff, sizeof(recvBuff), 0);
-						 cout<<"Recibido: "<<recvBuff<<endl;
-						 p.setCodigo(recvBuff);
-						 //Con el resto de los campos
-						 lp->aniadirProductoLista(p);
-						 }*/
-
-						lp->imprimir();
-						/*imprimirListaProductos (productosBD);
-						 codProd = nombreProductoDevolver();
-						 devolverProducto(&productosBD, codProd);
-						 imprimirListaProductos(productosBD);
-						 sqlite3_open(nombd, &db);
-						 devolverProductoBD(db, codProd);
-						 sqlite3_close (db);*/
+						*lp = recibirListaProductos(recvBuff, s);
+						lp->imprimirListaProductos(*lp);
+						codigoDevolver =
+								codigoDevolver.nombreProductoDevolver();
+						sprintf(sendBuff, "%s", codigoDevolver.getCodigo());
+						send(s, sendBuff, sizeof(sendBuff), 0);
+						*lp = recibirListaProductos(recvBuff, s);
+						lp->imprimirListaProductos(*lp);
 						break;
 					case 3:
+						*lp = recibirListaProductos(recvBuff, s);
+						lp->imprimirListaProductos(*lp);
 						break;
 					case 4:
+						cout << endl
+								<< "Introduce una categoria (0 - MESAS, 1 - SILLAS, 2 - SOFAS): ";
+						cin >> categoria;
+//						sprintf(sendBuff, "%i", categoria);
+//						send(s, sendBuff, sizeof(sendBuff), 0);
+//						*lp = recibirListaProductos(recvBuff, s);
+//						lp->imprimirListaProductos(*lp);
+						listaCat = listaCat.buscarProducto(*lp, categoria);
+						listaCat.imprimirListaProductos(listaCat);
 						break;
 					case 0:
 						cout << endl << "Agur!" << endl << endl;
@@ -209,15 +232,100 @@ int main(int argc, char *argv[]) {
 								<< endl;
 						cin >> modif;
 						if (modif == 1) {
-							sprintf(sendBuff, "%i", modif);
+							nombreProductoModificar =
+									nombreProductoModificar.codigoProductoModificar();
+							cout << "Introduce la nueva cantidad del producto: "
+									<< endl;
+							cin >> nuevaCantidad;
+							//Enviamos la nueva cantidad
+							sprintf(sendBuff, "%i", nuevaCantidad);
+							send(s, sendBuff, sizeof(sendBuff), 0);
+
+							//Enviamos el código del producto que vamos a modificar.
+							sprintf(sendBuff, "%s",
+									nombreProductoModificar.getCodigo());
 							send(s, sendBuff, sizeof(sendBuff), 0);
 
 						}
 
 						break;
 					case 3:
+						cout << endl
+								<< "¿Estás seguro de querer eliminar un producto? (si: 1, no: 0): "
+								<< endl;
+						cin >> elim;
+						if (elim == 1) {
+							nombreProductoEliminar =
+									nombreProductoEliminar.codigoProductoBorrar();
+							//Enviamos el código del producto que vamos a borrar.
+							sprintf(sendBuff, "%s",
+									nombreProductoEliminar.getCodigo());
+							send(s, sendBuff, sizeof(sendBuff), 0);
+
+						}
 						break;
 					case 4:
+						*lp = recibirListaProductos(recvBuff, s);
+						lp->imprimirListaProductos(*lp);
+
+						break;
+					case 5:
+						cout << "ESTADÍSTICAS DE MUEBLES DEUSTO: " << endl
+								<< endl;
+
+						//PRODUCTO MÁS CARO DE LA TIENDA
+						*lp = recibirListaProductos(recvBuff, s);
+						caro = lp->masCaro(*lp);
+						cout << "1. PRODUCTO MÁS CARO DE LA TIENDA: " << endl;
+						cout << "	[Código: " << caro.getCodigo() << ", Nombre: "
+								<< caro.getNombre() << ", Descripción: "
+								<< caro.getDescripcion() << ", Cantidad: "
+								<< caro.getCantidad() << ", Precio: "
+								<< caro.getPrecio();
+						if (caro.getTipo() == 0) {
+							cout << ", Categoria: MESAS]" << endl;
+						} else if (caro.getTipo() == 1) {
+							cout << ", Categoria: SILLAS]" << endl;
+						} else if (caro.getTipo() == 2) {
+							cout << ", Categoria: SOFAS]" << endl;
+						} else {
+							cout << ", Categoria: Desconocida]" << endl;
+						}
+
+						//NÚMERO DE PRODUCTOS EN CADA CATEGORÍA
+						cout << endl
+								<< "2. NÚMERO DE PRODUCTOS EN CADA CATEGORÍA: "
+								<< endl;
+						mesas = 0;
+						mesas = lp->numProductosCategoria(*lp, 0);
+						sillas = 0;
+						sillas = lp->numProductosCategoria(*lp, 1);
+						sofas = 0;
+						sofas = lp->numProductosCategoria(*lp, 2);
+						cout << " 	MESAS: " << mesas << endl;
+						cout << " 	SILLAS: " << sillas << endl;
+						cout << " 	SOFÁS: " << sofas << endl;
+
+						//PRODUCTO CON MAYOR CANTIDAD EN LA TIENDA
+						mayorCantidad = lp->masCantidad(*lp);
+						cout << endl
+								<< "3. EL PRODUCTO CON MAYOR CANTIDAD EN LA TIENDA: "
+								<< endl;
+						cout << "	[Código: " << mayorCantidad.getCodigo()
+								<< ", Nombre: " << mayorCantidad.getNombre()
+								<< ", Descripción: "
+								<< mayorCantidad.getDescripcion()
+								<< ", Cantidad: " << mayorCantidad.getCantidad()
+								<< ", Precio: " << mayorCantidad.getPrecio();
+						if (mayorCantidad.getTipo() == 0) {
+							cout << ", Categoria: MESAS]" << endl;
+						} else if (mayorCantidad.getTipo() == 1) {
+							cout << ", Categoria: SILLAS]" << endl;
+						} else if (mayorCantidad.getTipo() == 2) {
+							cout << ", Categoria: SOFAS]" << endl;
+						} else {
+							cout << ", Categoria: Desconocida]" << endl;
+						}
 
 						break;
 					case 0:

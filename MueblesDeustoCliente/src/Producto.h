@@ -8,6 +8,7 @@
 #ifndef SRC_PRODUCTO_H_
 #define SRC_PRODUCTO_H_
 //#include "CategoriaProducto.h"
+//#include "ListaProductos.h"
 
 class Producto {
 	char cod_p[10];
@@ -39,6 +40,8 @@ public:
 	void setPrecio(double precio);
 	void setTipo(int tipo);
 	void setCodigo(char * cod);
+	void setNombre(char * nom);
+	void setDescripcion(char * desc);
 };
 
 

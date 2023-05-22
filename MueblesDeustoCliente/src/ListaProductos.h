@@ -14,8 +14,13 @@ public:
 	void anadirProducto(ListaProductos *lp);
 	void aniadirProductoLista(const Producto &p);
 	void eliminarProducto(Producto p, ListaProductos *lp);
+	int getNumProductos();
 	void imprimir();
 	virtual ~ListaProductos();
+	Producto masCaro(ListaProductos lp);
+	int numProductosCategoria(ListaProductos lp, int categoria);
+	Producto masCantidad(ListaProductos lp);
+	void imprimirListaProductos(ListaProductos lp);
 };
 
 #endif /* SRC_LISTAPRODUCTOS_H_ */

@@ -64,12 +64,11 @@ int Producto::getCantidad() {
 	return cantidad;
 }
 
-
-char * Producto::getDescripcion(){
+char* Producto::getDescripcion() {
 	return descripcion;
 }
 
-int Producto::getTipo(){
+int Producto::getTipo() {
 	return tipo;
 }
 
@@ -83,7 +82,9 @@ int Producto::nuevaCantidadProducto() {
 
 Producto Producto::codigoProductoModificar() {
 	Producto p;
-	cout << "\n¿Qué producto desea modificar? (introduzca el código del producto): " << endl;
+	cout
+			<< "\n¿Qué producto desea modificar? (introduzca el código del producto): "
+			<< endl;
 	cin >> p.cod_p;
 	return p;
 }
@@ -118,10 +119,20 @@ void Producto::setTipo(int tipo) {
 	this->tipo = tipo;
 }
 
-void Producto::setCodigo(char * cod){
-	strcpy(cod_p,cod);
+void Producto::setCodigo(char *cod) {
+	strcpy(cod_p, cod);
 }
+
+void Producto::setNombre(char *nom) {
+	strcpy(nombre, nom);
+}
+
+void Producto::setDescripcion(char *desc) {
+	strcpy(descripcion, desc);
+}
+
 //No hemos reservado memoria para nada, no hay nada que destruir.
 //Producto::~Producto() {
 //
 //}
+

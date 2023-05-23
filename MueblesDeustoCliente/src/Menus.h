@@ -14,8 +14,6 @@ public:
 	static int menuAdmin();
 	static int menuCliente();
 
-//	Cliente inicioSesion();
-	void leerConfig(char *nomfich, char *nombd);
 	virtual ~Menus();
 };
 

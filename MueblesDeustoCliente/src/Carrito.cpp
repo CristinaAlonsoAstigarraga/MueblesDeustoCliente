@@ -9,8 +9,6 @@ Carrito::Carrito() {
 	dni[0] = '\0';
 	importeTotal = 0;
 
-
-
 }
 
 Carrito::Carrito(int np, char *d, float it) {
@@ -24,40 +22,22 @@ Carrito::Carrito(int np, char *d, float it) {
 	}
 }
 
-Producto * Carrito::getAProductos() const{
+//GETTERS:
+Producto* Carrito::getAProductos() const {
 	return this->aProductos;
 }
 
-int Carrito::getNumProductos(){
+int Carrito::getNumProductos() {
 	return numProductos;
 }
-char *Carrito::getDni(){
+char* Carrito::getDni() {
 	return dni;
 }
-float Carrito::getImporteTotal(){
+float Carrito::getImporteTotal() {
 	return importeTotal;
 }
 
-//Carrito::Carrito(const Carrito &c) {
-//
-//}
-
-//int Carrito::mostrarCarrito(Carrito *c) {
-//
-//}
-void Carrito::imprimirCarrito(Carrito c) {
-	cout << "\nCarrito del usuario:" << c.dni << endl;
-	for (int i = 0; i < c.numProductos; i++) {
-		cout << endl<<"[PRODUCTO " << i + 1;
-		cout << ": CODIGO: " << c.aProductos[i].getCodigo();
-		cout << ", NOMBRE: " << c.aProductos[i].getNombre();
-		cout << ", CANTIDAD: " << c.aProductos[i].getCantidad();
-		cout << ", PRECIO: " << c.aProductos[i].getPrecio() << "]" << endl;
-	}
-}
-void Carrito::imprimirTicket(Carrito c, char *nombreFichero) {
-
-}
+//CLIENTE:
 void Carrito::eliminarProductoCarrito(Carrito *carrito, Producto producto) {
 	int i;
 	int encontrado = 0;
@@ -84,8 +64,9 @@ void Carrito::eliminarProductoCarrito(Carrito *carrito, Producto producto) {
 }
 void Carrito::aniadirProductoCarrito(Carrito *carrito, Producto p) {
 	carrito->numProductos++;
-	Producto* newArray = new Producto[carrito->numProductos];
-	std::copy(carrito->aProductos, carrito->aProductos + carrito->numProductos - 1, newArray);
+	Producto *newArray = new Producto[carrito->numProductos];
+	std::copy(carrito->aProductos,
+			carrito->aProductos + carrito->numProductos - 1, newArray);
 	newArray[carrito->numProductos - 1] = p;
 	delete[] carrito->aProductos;
 	carrito->aProductos = newArray;
@@ -97,10 +78,25 @@ void Carrito::comprarCarrito(Carrito *carrito) {
 	carrito->aProductos = NULL;
 	carrito->importeTotal = 0.0;
 }
+
+//ADMIN:
+void Carrito::imprimirCarrito(Carrito c, char *nombreCliente) {
+	cout << "\nCarrito del usuario " << nombreCliente << ":" << endl;
+	for (int i = 0; i < c.numProductos; i++) {
+		cout << endl << "[PRODUCTO " << i + 1;
+		cout << ": CODIGO: " << c.aProductos[i].getCodigo();
+		cout << ", NOMBRE: " << c.aProductos[i].getNombre();
+		cout << ", CANTIDAD: " << c.aProductos[i].getCantidad();
+		cout << ", PRECIO: " << c.aProductos[i].getPrecio() << "]" << endl;
+	}
+}
+void Carrito::imprimirTicket(Carrito c, char *nombreFichero) {
+
+}
+
 int Carrito::menuBuscar(Carrito *c, ListaProductos lp) {
 	int opcion;
 	char codigoProd[20] = "";
-//	Producto *p;
 	do {
 		cout << "\n1. Aniadir un producto a mi carrito" << endl;
 		cout << "0. Volver" << endl;
@@ -112,9 +108,7 @@ int Carrito::menuBuscar(Carrito *c, ListaProductos lp) {
 					<< "¿Qué producto de la tienda desea añadir a su carrito? (Introduzca su codigo): "
 					<< endl;
 			cin >> codigoProd;
-//			p = buscarProd(lp, codigoProd);
-//			aniadirProductoCarrito(c, *p);
-			imprimirCarrito(*c);
+			imprimirCarrito(*c, c->dni);
 			break;
 		case 0:
 			cout << "\nAgur!" << endl;

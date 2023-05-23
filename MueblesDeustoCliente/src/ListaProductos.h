@@ -5,23 +5,26 @@
 using namespace std;
 class ListaProductos {
 	Producto *aProductos;
-	public:
 	int tam, numProductos;
 public:
+
+	//CONSTRUCTORES:
 	ListaProductos();
 	ListaProductos(int numProductos);
-	ListaProductos* buscarProducto(ListaProductos lp, int categoria);
-	void volcarFicheroAListaProductos(ListaProductos *lp, char *nombreFichero);
-	void anadirProducto(ListaProductos *lp);
-	void aniadirProductoLista(const Producto &p);
-	void eliminarProducto(Producto p, ListaProductos *lp);
+
+	//GETTERS:
 	int getNumProductos();
-	void imprimir();
-	virtual ~ListaProductos();
+
+	//ADMIN
+	ListaProductos* buscarProducto(ListaProductos lp, int categoria);
+	void aniadirProductoLista(const Producto &p);
 	Producto masCaro(ListaProductos lp);
+	void imprimir();
 	int numProductosCategoria(ListaProductos lp, int categoria);
 	Producto masCantidad(ListaProductos lp);
 	void imprimirListaProductos(ListaProductos lp);
+	Producto* buscarProd(ListaProductos lista, char *codigo);
+	virtual ~ListaProductos();
 };
 
 #endif /* SRC_LISTAPRODUCTOS_H_ */

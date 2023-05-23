@@ -13,14 +13,21 @@ class Cliente {
 	char usuario[20];
 	char contrasena[20];
 public:
+
+	//CONSTRUCTORES:
 	Cliente();
 	Cliente(char *d, char *u, char *con);
 	Cliente(const Cliente &c);
-    Cliente registro();
-    Cliente inicioSesion();
+
+	//GETTERS:
 	char* getDni();
-	char * getUsuario();
-	char * getContrasenya();
+	char* getUsuario();
+	char* getContrasenya();
+
+	//CLIENTE:
+	Cliente registro();
+	Cliente inicioSesion();
+
 	virtual ~Cliente();
 };
 #endif /* SRC_CLIENTE_H_ */

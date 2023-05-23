@@ -13,6 +13,9 @@ using namespace std;
 #include "src/ListaProductos.h"
 #include "string.h"
 
+/**
+ * Método para recibir una lista de productos desde el lado del servidor.
+ */
 ListaProductos recibirListaProductos(char *recvBuff, SOCKET s) {
 	ListaProductos *lp;
 	int tam;
@@ -20,40 +23,36 @@ ListaProductos recibirListaProductos(char *recvBuff, SOCKET s) {
 	double precio;
 	recv(s, recvBuff, sizeof(recvBuff), 0);
 	sscanf(recvBuff, "%i", &tam);
-//	cout << "Recibido: " << tam << endl;
 	lp = new ListaProductos(tam);
 	Producto p;
 	for (int i = 0; i < tam; i++) {
-		recvBuff[0]='\0';
+		recvBuff[0] = '\0';
 		recv(s, recvBuff, sizeof(recvBuff), 0);
-//		cout << "Recibido: " << recvBuff << endl;
 		p.setCodigo(recvBuff);
-		recvBuff[0]='\0';
+		recvBuff[0] = '\0';
 		recv(s, recvBuff, sizeof(recvBuff), 0);
 		p.setNombre(recvBuff);
-		recvBuff[0]='\0';
+		recvBuff[0] = '\0';
 		recv(s, recvBuff, sizeof(recvBuff), 0);
 		p.setDescripcion(recvBuff);
-		recvBuff[0]='\0';
+		recvBuff[0] = '\0';
 		recv(s, recvBuff, sizeof(recvBuff), 0);
 		sscanf(recvBuff, "%i", &cantidad);
 		p.setCantidad(cantidad);
-		recvBuff[0]='\0';
+		recvBuff[0] = '\0';
 		recv(s, recvBuff, sizeof(recvBuff), 0);
 		sscanf(recvBuff, "%lf", &precio);
 		p.setPrecio(precio);
-		recvBuff[0]='\0';
+		recvBuff[0] = '\0';
 		recv(s, recvBuff, sizeof(recvBuff), 0);
 		sscanf(recvBuff, "%i", &tipo);
 		p.setTipo(tipo);
-
-		//Con el resto de los campos
-
 		lp->aniadirProductoLista(p);
 	}
 
 	return *lp;
 }
+
 int main(int argc, char *argv[]) {
 
 	WSADATA wsaData;
@@ -99,32 +98,43 @@ int main(int argc, char *argv[]) {
 
 	/*EMPIEZA EL PROGRAMA DEL CLIENTE*/
 
+	//Clientes:
 	Cliente nuevoCliente;
 	Cliente inicio;
+
+	//Listas de Productos:
 	ListaProductos *lp;
-	ListaProductos *lp2;
+	ListaProductos listaCat;
+
+	//Productos:
 	Producto p;
 	Producto codigoDevolver;
 	Producto nombreProductoModificar;
 	Producto nombreProductoEliminar;
 	Producto caro;
 	Producto mayorCantidad;
-	int cantidad, tipo;
-	double precio;
-	int sillas, mesas, sofas, categoria;
-	ListaProductos listaCat;
-
-	char nom[20];
-	int opcion = 10, opcion2 = 10, opcion3 = 10, i, clienteExiste, adminExiste,
-			modif = 0, nuevaCantidad, elim = 0;
+	Producto comprar;
+	Producto borrar;
 	Producto nuevoProducto;
+
+	//Carritos:
+	Carrito *carritoCliente = new Carrito(0, inicio.getDni(), 0);
+
+	//Enteros, doubles y cadenas:
+	int opcion = 10, opcion2 = 10, opcion3 = 10, opcion4 = 10, clienteExiste,
+			adminExiste, modif = 0, nuevaCantidad, elim = 0;
+	int sillas, mesas, sofas, categoria, borrarP;
+	char *nombreProductoComprar;
+	char *codProductoBorrar;
+
+	//MENÚ PRINCIPAL
 	do {
 		opcion = Menus::menuInicio();
 		sprintf(sendBuff, "%i", opcion);
 		send(s, sendBuff, sizeof(sendBuff), 0);
 
 		switch (opcion) {
-		case 1:
+		case 1:	//REGISTRO DE UN NUEVO CLIENTE
 			nuevoCliente = nuevoCliente.registro();
 			sprintf(sendBuff, "%s", nuevoCliente.getDni());
 			send(s, sendBuff, sizeof(sendBuff), 0);
@@ -142,7 +152,7 @@ int main(int argc, char *argv[]) {
 
 			}
 			break;
-		case 2:
+		case 2:	//INICIO DE SESIÓN (DE CLIENTE O DE ADMIN)
 			clienteExiste = 0;
 			adminExiste = 0;
 			inicio = inicio.inicioSesion();
@@ -161,30 +171,74 @@ int main(int argc, char *argv[]) {
 
 			if (clienteExiste) {
 				cout << "¡Bienvenido a MueblesDeusto!" << endl;
-				/*Carrito *carritoCliente = new Carrito[sizeof(Carrito)];
-				carritoCliente->getAProductos() = NULL;
-				carritoCliente->getNumProductos() = 0;		//GETTER O SETTER?
-				strcpy(carritoCliente->getDni(), inicio.getDni());
-				carritoCliente->getImporteTotal() = 0;
-				*/
-				do {
+				do {	//INICIO DE SESIÓN DE CLIENTE Y SU MENÚ
 					opcion2 = Menus::menuCliente();
 					sprintf(sendBuff, "%i", opcion2);
 					send(s, sendBuff, sizeof(sendBuff), 0);
 
 					switch (opcion2) {
-					case 1:
-//						if(carritoCliente->getNumProductos() == 0){
-//							cout<<"No tienes ningun producto en el carrito"<<endl;
-//						}else{
-//							carritoCliente->imprimirCarrito(*carritoCliente);
-//						}
-//						cout << endl
-//						<< "¿Estás seguro de  un producto? (si: 1, no: 0): "
-//						<< endl;
-//						cin >> modif;
+					case 1:	//VISUALIZAR EL CARRITO DE LA COMPRA
+						do {
+							carritoCliente->imprimirCarrito(*carritoCliente,
+									inicio.getDni());
+							cout << endl << "1. Comprar" << endl;
+							cout << "2. Eliminar producto" << endl;
+							cout << "0. Volver" << endl;
+							cout << "Selecciona una opción: ";
+							cin >> opcion3;
+							switch (opcion3) {
+							case 1:	//COMPRAR EL CARRITO DE LA COMPRA
+								if (carritoCliente->getNumProductos() == 0) {
+									cout << "El carrito está vacio." << endl;
+								} else {
+									//imprimirTicket(*carritoCliente, "Ticket");
+									cout
+											<< "Número de productos en el carrito del cliente ANTES DE LA COMPRA: "
+											<< carritoCliente->getNumProductos()
+											<< endl;
+									carritoCliente->comprarCarrito(
+											carritoCliente);
+									cout
+											<< "La compra se ha realizado con éxito y su ticket de la compra ha sido generado."
+											<< endl;
+									cout
+											<< "Número de productos en el carrito del cliente DESPUÉS DE LA COMPRA: "
+											<< carritoCliente->getNumProductos()
+											<< endl;
+								}
+								break;
+							case 2: //ELIMINAR UN PRODUCTO DEL CARRITO DE LA COMPRA
+								cout << endl
+										<< "Estás seguro de que desea eliminar un producto de su carrito? (1: si, 0: no)"
+										<< endl;
+								cin >> borrarP;
+								if (borrarP == 1) {
+									carritoCliente->imprimirCarrito(
+											*carritoCliente,
+											inicio.getUsuario());
+									cout << endl
+											<< "Introduce el código del producto que desee eliminar del carrito: "
+											<< endl;
+									cin >> codProductoBorrar;
+									borrar.setCodigo(codProductoBorrar);
+									carritoCliente->eliminarProductoCarrito(
+											carritoCliente, borrar);
+									cout << endl
+											<< "Producto eliminado correctamente"
+											<< endl;
+									carritoCliente->imprimirCarrito(
+											*carritoCliente,
+											inicio.getUsuario());
+								} else {
+									break;
+								}
+								break;
+							case 0:	//VOLVER
+								break;
+							}
+						} while (opcion3 != 0);
 						break;
-					case 2:
+					case 2:	//DEVOLVER UN PRODUCTO
 						*lp = recibirListaProductos(recvBuff, s);
 						lp->imprimirListaProductos(*lp);
 						codigoDevolver =
@@ -194,21 +248,44 @@ int main(int argc, char *argv[]) {
 						*lp = recibirListaProductos(recvBuff, s);
 						lp->imprimirListaProductos(*lp);
 						break;
-					case 3:
+					case 3: //VISUALIZAR TODOS LOS PRODUCTOS DE LA TIENDA
 						*lp = recibirListaProductos(recvBuff, s);
 						lp->imprimirListaProductos(*lp);
 						break;
-					case 4:
+					case 4:	//BUSCAR UN PRODUCTO EN LA TIENDA - POR CATEGORIAS
 						cout << endl
 								<< "Introduce una categoria (0 - MESAS, 1 - SILLAS, 2 - SOFAS): ";
 						cin >> categoria;
-//						sprintf(sendBuff, "%i", categoria);
-//						send(s, sendBuff, sizeof(sendBuff), 0);
 						*lp = recibirListaProductos(recvBuff, s);
-//						lp->imprimirListaProductos(*lp);
 						listaCat = *(listaCat.buscarProducto(*lp, categoria));
-						cout<<listaCat.numProductos<<endl;
+						cout << listaCat.getNumProductos() << endl;
 						listaCat.imprimirListaProductos(listaCat);
+
+						//COMPRAR UN PRODUCTO DESDE LA BÚSQUEDA
+						do {
+							cout << endl
+									<< "1. Aniadir un producto a mi carrito"
+									<< endl;
+							cout << "0. Volver" << endl;
+							cout << "Selecciona una opción: ";
+							cin >> opcion4;
+							switch (opcion4) {
+							case 1:	//COMPRAR UN PRODUCTO
+								cout << endl
+										<< "¿Qué producto de la tienda desea añadir a su carrito? (Introduzca su codigo): ";
+								cin >> nombreProductoComprar;
+								comprar.setCodigo(nombreProductoComprar);
+								lp->buscarProd(*lp, comprar.getCodigo());
+								carritoCliente->aniadirProductoCarrito(
+										carritoCliente, comprar);
+								carritoCliente->imprimirCarrito(*carritoCliente,
+										inicio.getUsuario());
+								break;
+							case 0:	//VOLVER
+								cout << endl << "Agur!" << endl;
+								break;
+							}
+						} while (opcion4 != 0);
 						break;
 					case 0:
 						cout << endl << "Agur!" << endl << endl;
@@ -216,7 +293,7 @@ int main(int argc, char *argv[]) {
 					}
 				} while (opcion2 != 0);
 
-			} else if (adminExiste) {
+			} else if (adminExiste) {//INICIO DE SESIÓN ADMINISTRADOR Y SU MENÚ
 				cout << "¡Bienvenido a MueblesDeusto!" << endl;
 				do {
 					opcion2 = Menus::menuAdmin();
@@ -224,7 +301,7 @@ int main(int argc, char *argv[]) {
 					send(s, sendBuff, sizeof(sendBuff), 0);
 
 					switch (opcion2) {
-					case 1:
+					case 1:	//AÑADIR UN PRODUCTO A LA BBDD DE LA TIENDA
 						nuevoProducto = nuevoProducto.anadirProductoBD();
 						sprintf(sendBuff, "%s", nuevoProducto.getCodigo());
 						send(s, sendBuff, sizeof(sendBuff), 0);
@@ -240,7 +317,7 @@ int main(int argc, char *argv[]) {
 						send(s, sendBuff, sizeof(sendBuff), 0);
 
 						break;
-					case 2:
+					case 2:	//MODIFICAR UN PRODUCTO DE LA BBDD DE LA TIENDA
 						cout << endl
 								<< "¿Estás seguro de querer modificar un producto? (si: 1, no: 0): "
 								<< endl;
@@ -263,7 +340,7 @@ int main(int argc, char *argv[]) {
 						}
 
 						break;
-					case 3:
+					case 3:	//ELIMINAR UN PRODUCTO DE LA BBDD DE LA TIENDA
 						cout << endl
 								<< "¿Estás seguro de querer eliminar un producto? (si: 1, no: 0): "
 								<< endl;
@@ -278,12 +355,12 @@ int main(int argc, char *argv[]) {
 
 						}
 						break;
-					case 4:
+					case 4:	//MOSTRAR EL ALMACEN DE LA TIENDA (LOS PRODUCTOS DE LA BBDD)
 						*lp = recibirListaProductos(recvBuff, s);
 						lp->imprimirListaProductos(*lp);
 
 						break;
-					case 5:
+					case 5:	//MOSTRAR LAS ESTADÍSTICAS DE LA TIENDA
 						cout << "ESTADÍSTICAS DE MUEBLES DEUSTO: " << endl
 								<< endl;
 
@@ -342,19 +419,19 @@ int main(int argc, char *argv[]) {
 						}
 
 						break;
-					case 0:
+					case 0:	//VOLVER
 						cout << endl << "Agur!" << endl << endl;
 						break;
 					}
 				} while (opcion2 != 0);
-			} else {
+			} else { //USUARIO YA REGISTRADO
 				cout << endl << "El usuario no está registrado." << endl;
 			}
 			break;
-		case 0:
+		case 0:	//SALIR DE LA APLICACIÓN
 			cout << endl << "Agur!" << endl << endl;
 			break;
-		default:
+		default: //ERROR
 			cout << endl << "Error" << endl;
 			break;
 		}

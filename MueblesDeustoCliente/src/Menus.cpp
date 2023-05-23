@@ -49,22 +49,6 @@ int Menus::menuCliente() {
 	cin >> opcion;
 	return opcion;
 }
-/*
-Cliente Menus::inicioSesion() {
-	char get[2] = "";
-	Cliente c;
-	cout<<"\nIntroduce el nombre de usuario: "<<endl;
-	cin>>get;
-	sscanf(get, "%s", c.getUsuario());
-	cout<<"Introduce la contrasenya: "<<endl;
-	cin>>get;
-	sscanf(get, "%s", c.getContrasenya());
-	return c;
-
-}*/
-void Menus::leerConfig(char *nomfich, char *nombd) {
-
-}
 
 Menus::~Menus() {
 }

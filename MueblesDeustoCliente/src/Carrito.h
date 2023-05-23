@@ -2,26 +2,33 @@
 #define CARRITO_H_
 #include "Producto.h"
 #include "ListaProductos.h"
-class Carrito{
+class Carrito {
 	Producto *aProductos;
 	int numProductos;
 	char dni[10];
 	float importeTotal;
 public:
+
+	//CONSTRUCTORES:
 	Carrito();
 	Carrito(int np, char *d, float it);
-	Producto * getAProductos() const;		//Producto * getAProductos()?
+
+	//GETTERS:
+	Producto* getAProductos() const;
 	int getNumProductos();
-	char *getDni();
+	char* getDni();
 	float getImporteTotal();
-//	Carrito(const Carrito &c);
-	int mostrarCarrito(Carrito *c);
-	void imprimirCarrito(Carrito c);
-	void imprimirTicket (Carrito c, char *nombreFichero);
-	void eliminarProductoCarrito(Carrito *carrito, Producto producto);//el puntero de nombre no es 100% correcrto, hasta que se pergunte a marian
-	void aniadirProductoCarrito(Carrito* carrito, Producto p);
+
+	//CLIENTE:
+	void eliminarProductoCarrito(Carrito *carrito, Producto producto);
+	void aniadirProductoCarrito(Carrito *carrito, Producto p);
 	void comprarCarrito(Carrito *carrito);
+
+	//ADMIN:
+	void imprimirCarrito(Carrito c, char *nombreCliente);
+	void imprimirTicket(Carrito c, char *nombreFichero);
 	int menuBuscar(Carrito *c, ListaProductos lp);
+
 	virtual ~Carrito();
 };
 

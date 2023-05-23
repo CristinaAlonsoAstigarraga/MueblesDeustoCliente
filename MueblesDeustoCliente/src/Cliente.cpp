@@ -10,6 +10,7 @@
 #include <iostream>
 using namespace std;
 
+//CONSTRUCTORES:
 Cliente::Cliente() {
 	dni[0] = '\0';
 	usuario[0] = '\0';
@@ -29,6 +30,20 @@ Cliente::Cliente(const Cliente &c) {
 
 }
 
+//GETTERS:
+char* Cliente::getDni() {
+	return dni;
+}
+
+char* Cliente::getUsuario() {
+	return usuario;
+}
+
+char* Cliente::getContrasenya() {
+	return contrasena;
+}
+
+//CLIENTE:
 Cliente Cliente::registro() {
 	Cliente c;
 	cout << "\nIntroduce tu DNI: " << endl;
@@ -42,23 +57,11 @@ Cliente Cliente::registro() {
 
 Cliente Cliente::inicioSesion() {
 	Cliente c;
-	cout<<"\nIntroduce el nombre de usuario: ";
-	cin>>c.usuario;
-	cout<<"Introduce la contrasenya: ";
-	cin>> c.contrasena;
+	cout << "\nIntroduce el nombre de usuario: ";
+	cin >> c.usuario;
+	cout << "Introduce la contrasenya: ";
+	cin >> c.contrasena;
 	return c;
-}
-
-char* Cliente::getDni() {
-	return dni;
-}
-
-char* Cliente::getUsuario() {
-	return usuario;
-}
-
-char* Cliente::getContrasenya() {
-	return contrasena;
 }
 
 Cliente::~Cliente() {

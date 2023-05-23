@@ -3,6 +3,8 @@
 #include <iostream>
 using namespace std;
 
+
+//CONSTRUCTORES:
 Producto::Producto() {
 	cod_p[0] = '\0';
 	nombre[0] = '\0';
@@ -30,6 +32,57 @@ Producto::Producto(const Producto &p) {
 	tipo = p.tipo;
 }
 
+//GETTERS:
+char* Producto::getCodigo() {
+	return cod_p;
+}
+
+char* Producto::getNombre() {
+	return nombre;
+}
+
+char* Producto::getDescripcion() {
+	return descripcion;
+}
+
+int Producto::getCantidad() {
+	return cantidad;
+}
+
+double Producto::getPrecio() {
+	return precio;
+}
+
+int Producto::getTipo() {
+	return tipo;
+}
+
+//SETTERS:
+void Producto::setCodigo(char *cod) {
+	strcpy(cod_p, cod);
+}
+
+void Producto::setNombre(char *nom) {
+	strcpy(nombre, nom);
+}
+
+void Producto::setDescripcion(char *desc) {
+	strcpy(descripcion, desc);
+}
+
+void Producto::setCantidad(int cantidad) {
+	this->cantidad = cantidad;
+}
+
+void Producto::setPrecio(double precio) {
+	this->precio = precio;
+}
+
+void Producto::setTipo(int tipo) {
+	this->tipo = tipo;
+}
+
+//CLIENTE
 Producto Producto::nombreProductoDevolver() {
 	Producto p;
 	cout
@@ -48,33 +101,8 @@ Producto Producto::codigoProductoBorrar() {
 	return p;
 }
 
-double Producto::getPrecio() {
-	return precio;
-}
-
-char* Producto::getCodigo() {
-	return cod_p;
-}
-
-char* Producto::getNombre() {
-	return nombre;
-}
-
-int Producto::getCantidad() {
-	return cantidad;
-}
-
-char* Producto::getDescripcion() {
-	return descripcion;
-}
-
-int Producto::getTipo() {
-	return tipo;
-}
-
 int Producto::nuevaCantidadProducto() {
 	int nuevaCantidad;
-	char get[1000] = "";
 	cout << "Introduce la nueva cantidad del producto: " << endl;
 	cin >> nuevaCantidad;
 	return nuevaCantidad;
@@ -106,33 +134,4 @@ Producto Producto::anadirProductoBD() {
 	cin >> p.tipo;
 	return p;
 }
-
-void Producto::setCantidad(int cantidad) {
-	this->cantidad = cantidad;
-}
-
-void Producto::setPrecio(double precio) {
-	this->precio = precio;
-}
-
-void Producto::setTipo(int tipo) {
-	this->tipo = tipo;
-}
-
-void Producto::setCodigo(char *cod) {
-	strcpy(cod_p, cod);
-}
-
-void Producto::setNombre(char *nom) {
-	strcpy(nombre, nom);
-}
-
-void Producto::setDescripcion(char *desc) {
-	strcpy(descripcion, desc);
-}
-
-//No hemos reservado memoria para nada, no hay nada que destruir.
-//Producto::~Producto() {
-//
-//}
 

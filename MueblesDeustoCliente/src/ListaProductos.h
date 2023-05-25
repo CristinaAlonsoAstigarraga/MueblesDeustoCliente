@@ -22,7 +22,7 @@ public:
 	void imprimir();
 	int numProductosCategoria(ListaProductos lp, int categoria);
 	Producto masCantidad(ListaProductos lp);
-	void imprimirListaProductos(ListaProductos lp);
+	void imprimirListaProductos();
 	Producto* buscarProd(ListaProductos lista, char *codigo);
 	virtual ~ListaProductos();
 };

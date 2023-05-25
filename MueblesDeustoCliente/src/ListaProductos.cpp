@@ -29,7 +29,6 @@ ListaProductos* ListaProductos::buscarProducto(ListaProductos lp,
 			listaCat->aniadirProductoLista(lp.aProductos[i]);
 		}
 	}
-	cout << "Numero de productos :" << listaCat->numProductos << endl;
 	return listaCat;
 }
 
@@ -112,21 +111,21 @@ Producto ListaProductos::masCantidad(ListaProductos lp) {
 	return p;
 }
 
-void ListaProductos::imprimirListaProductos(ListaProductos lp) {
+void ListaProductos::imprimirListaProductos() {
 	cout << "\nLista de productos de MueblesDeusto: \n";
-	for (int i = 0; i < lp.numProductos; i++) {
+	for (int i = 0; i < numProductos; i++) {
 		cout << "[PRODUCTO " << i + 1;
-		cout << ", CODIGO: " << lp.aProductos[i].getCodigo();
-		cout << ", NOMBRE: " << lp.aProductos[i].getNombre();
-		cout << ", DESCRIPCION: " << lp.aProductos[i].getDescripcion();
-		cout << ", CANTIDAD: " << lp.aProductos[i].getCantidad();
-		cout << ", PRECIO: " << lp.aProductos[i].getPrecio();
+		cout << ", CODIGO: " << aProductos[i].getCodigo();
+		cout << ", NOMBRE: " << aProductos[i].getNombre();
+		cout << ", DESCRIPCION: " << aProductos[i].getDescripcion();
+		cout << ", CANTIDAD: " << aProductos[i].getCantidad();
+		cout << ", PRECIO: " << aProductos[i].getPrecio();
 		cout << ", CATEGORIA: ";
-		if (lp.aProductos[i].getTipo() == 0) {
+		if (aProductos[i].getTipo() == 0) {
 			cout << "MESAS]" << endl;
-		} else if (lp.aProductos[i].getTipo() == 1) {
+		} else if (aProductos[i].getTipo() == 1) {
 			cout << "SILLAS]" << endl;
-		} else if (lp.aProductos[i].getTipo() == 2) {
+		} else if (aProductos[i].getTipo() == 2) {
 			cout << "SOFAS]" << endl;
 		} else {
 			cout << "Desconocida]" << endl;
@@ -136,8 +135,7 @@ void ListaProductos::imprimirListaProductos(ListaProductos lp) {
 
 Producto* ListaProductos::buscarProd(ListaProductos lista, char *codigo) {
 	Producto *p = new Producto();
-	fflush(stdout);
-	lista.imprimirListaProductos(lista);
+	lista.imprimirListaProductos();
 	for (int i = 0; i < lista.numProductos; i++) {
 		if (strcmp(lista.aProductos[i].getCodigo(), codigo) == 0) {
 			p->setCodigo(lista.aProductos[i].getCodigo());
